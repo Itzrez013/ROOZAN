@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'pages/details_page.dart';
+import 'pages/name_page.dart';
+import 'pages/welcome_page.dart';
+import 'widgets/onboarding_navigation_buttons.dart';
+import 'widgets/onboarding_page_indicator.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({required this.onComplete, super.key});
 
@@ -60,8 +66,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -77,148 +81,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onPageChanged: (page) =>
                         setState(() => _currentPage = page),
                     children: [
-                      _OnboardingPage(
-                        title: 'روزان؛ همراه برنامه‌های روزانه شما',
-                        description:
-                            'روزان فضایی ساده برای برنامه‌ریزی کارها و ثبت '
-                            'هدف‌هایی است که می‌خواهید هر روز دنبال کنید.',
+                      const WelcomePage(),
+                      NamePage(
+                        controller: _nameController,
+                        formKey: _nameFormKey,
+                        onSubmitted: _continue,
                       ),
-                      _OnboardingPage(
-                        title: 'دوست داریم شما را بشناسیم',
-                        description:
-                            'نامتان را بنویسید تا روزان با نام خودتان به شما '
-                            'خوش‌آمد بگوید.',
-                        child: Form(
-                          key: _nameFormKey,
-                          child: TextFormField(
-                            controller: _nameController,
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.right,
-                            textInputAction: TextInputAction.done,
-                            decoration: const InputDecoration(
-                              labelText: 'نام شما',
-                              hintText: 'مثلاً نازنین',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'لطفاً نامتان را وارد کنید';
-                              }
-                              return null;
-                            },
-                            onFieldSubmitted: (_) => _continue(),
-                          ),
-                        ),
-                      ),
-                      _OnboardingPage(
-                        title: 'برنامه‌ریزی، به سبک خودتان',
-                        description:
-                            'کارها و برنامه‌هایتان را در یک جا سامان دهید، '
-                            'برای زمان انجامشان یادآور بگذارید و با خیال راحت '
-                            'از روزتان لذت ببرید. اطلاعات شما روی همین دستگاه '
-                            'ذخیره می‌شود و برای استفاده از روزان به اینترنت '
-                            'نیازی ندارید.',
-                      ),
+                      const DetailsPage(),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    _pageCount,
-                    (index) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      height: 8,
-                      width: index == _currentPage ? 24 : 8,
-                      decoration: BoxDecoration(
-                        color: index == _currentPage
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.secondary,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
+                OnboardingPageIndicator(
+                  currentPage: _currentPage,
+                  pageCount: _pageCount,
                 ),
                 const SizedBox(height: 24),
-                Row(
-                  children: [
-                    if (_currentPage > 0)
-                      TextButton(
-                        onPressed: _isSaving ? null : _goBack,
-                        child: const Text('قبلی'),
-                      )
-                    else
-                      const SizedBox(width: 64),
-                    const Spacer(),
-                    FilledButton(
-                      onPressed: _isSaving ? null : _continue,
-                      child: _isSaving
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(
-                              _currentPage == _pageCount - 1
-                                  ? 'شروع کنیم'
-                                  : 'ادامه',
-                            ),
-                    ),
-                  ],
+                OnboardingNavigationButtons(
+                  currentPage: _currentPage,
+                  pageCount: _pageCount,
+                  isSaving: _isSaving,
+                  onBack: _goBack,
+                  onContinue: _continue,
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _OnboardingPage extends StatelessWidget {
-  const _OnboardingPage({
-    required this.title,
-    required this.description,
-    this.child,
-  });
-
-  final String title;
-  final String description;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.sizeOf(context).height * 0.65,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'lib/assets/ROOZAN.png',
-              height: 160,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 32),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              description,
-              textAlign: TextAlign.center,
-              style: textTheme.bodyLarge,
-            ),
-            if (child != null) ...[const SizedBox(height: 28), child!],
-          ],
         ),
       ),
     );
