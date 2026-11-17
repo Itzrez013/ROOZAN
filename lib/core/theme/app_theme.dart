@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_text_styles.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
@@ -12,6 +12,8 @@ class AppTheme {
       secondary: AppColors.lightSecondary,
       surface: AppColors.lightSurface,
     ),
+
+    textTheme: AppTextStyles.getTextTheme(isDark: false),
 
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.lightBackground,
@@ -30,6 +32,8 @@ class AppTheme {
       secondary: AppColors.darkSecondary,
       surface: AppColors.darkSurface,
     ),
+
+    textTheme: AppTextStyles.getTextTheme(isDark: true),
 
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.darkBackground,

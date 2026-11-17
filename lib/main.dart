@@ -1,8 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
+import 'core/storage/app_preferences.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await AppPreferences.init();
   runApp(const RoozanApp());
 }
 
