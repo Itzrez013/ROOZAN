@@ -38,7 +38,7 @@ class _RoozanAppState extends State<RoozanApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
 
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
 
       home: _onboardingCompleted
           ? const _HomeScreen()

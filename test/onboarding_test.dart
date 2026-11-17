@@ -27,6 +27,16 @@ void main() {
     );
 
     await tester.tap(find.text('ادامه'));
+    final pageScrollable = find
+        .descendant(
+          of: find.byType(PageView),
+          matching: find.byType(Scrollable),
+        )
+        .first;
+    expect(
+      tester.state<ScrollableState>(pageScrollable).position.axisDirection,
+      AxisDirection.right,
+    );
     await tester.pumpAndSettle();
     expect(find.text('دوست داریم شما را بشناسیم'), findsOneWidget);
 

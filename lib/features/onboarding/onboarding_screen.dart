@@ -75,20 +75,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (page) =>
-                        setState(() => _currentPage = page),
-                    children: [
-                      const WelcomePage(),
-                      NamePage(
-                        controller: _nameController,
-                        formKey: _nameFormKey,
-                        onSubmitted: _continue,
-                      ),
-                      const DetailsPage(),
-                    ],
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (page) =>
+                          setState(() => _currentPage = page),
+                      children: [
+                        const WelcomePage(),
+                        NamePage(
+                          controller: _nameController,
+                          formKey: _nameFormKey,
+                          onSubmitted: _continue,
+                        ),
+                        const DetailsPage(),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
