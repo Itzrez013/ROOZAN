@@ -16,6 +16,15 @@ void main() {
     await tester.pumpWidget(const RoozanApp());
 
     expect(find.text('روزان؛ همراه برنامه‌های روزانه شما'), findsOneWidget);
+    expect(
+      tester.getCenter(find.text('ادامه')).dx,
+      greaterThan(tester.getSize(find.byType(Scaffold)).width / 2),
+    );
+    final dots = find.byType(AnimatedContainer);
+    expect(
+      tester.getCenter(dots.at(0)).dx,
+      lessThan(tester.getCenter(dots.at(1)).dx),
+    );
 
     await tester.tap(find.text('ادامه'));
     await tester.pumpAndSettle();
